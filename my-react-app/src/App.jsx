@@ -1,17 +1,25 @@
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 import './App.css'
-import { useSelector, useDispatch } from 'react-redux'
-import { increment, decrement } from './store'
+import About from './Pages/About.jsx'
+import Home from './Pages/Home.jsx'
+import Products from './Pages/Products.jsx'
+import ProductDetails from './Pages/ProductDetails.jsx'
+import PrimarySearchAppBar from './components/Header.jsx'
 
 function App() {
-  const count = useSelector((state) => state.counter.value);
-  const dispatch = useDispatch();
+  
 
   return (
-    <>
-      <h1>Counter: {count}</h1>
-      <button onClick={() => dispatch(increment())}>Increment</button>
-      <button onClick={() => dispatch(decrement())}>Decrement</button>
-    </>
+    <Router>
+      <PrimarySearchAppBar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/products" element={<Products />} />
+        <Route path="/product/:id" element={<ProductDetails />} />
+      </Routes>
+    </Router>
   )
 }
 
