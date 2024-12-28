@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TextField, Button, Typography, Box, Divider, IconButton, InputAdornment } from "@mui/material";
+import { TextField, Button, Typography, Box, Divider, IconButton, InputAdornment, Alert } from "@mui/material";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { Visibility, VisibilityOff, Google, MobileFriendly } from "@mui/icons-material";
@@ -7,29 +7,32 @@ import MyImage from "../images/Logo-new.webp";
 import { useDispatch } from 'react-redux';
 import { signIn } from '../features/authSlice';
 
-const SignIn = ({ onClose, onSuccessfulAuth }) => {
+const SignIn = ({ onClose, onSuccessfulAuth, onSwitchToSignUp }) => {
   const [showPassword, setShowPassword] = useState(false);
+  const [loginError, setLoginError] = useState(null);
   const dispatch = useDispatch();
-
-  const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
 
   const validationSchema = Yup.object({
     email: Yup.string().email("Invalid email address").required("Email is required"),
-    password: Yup.string().min(6, "Password must be at least 6 characters").required("Password is required"),
+    password: Yup.string().required("Password is required"),
   });
-
-  const initialValues = {
-    email: "",
-    password: "",
-  };
 
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
-      await dispatch(signIn(values)).unwrap();
-      onSuccessfulAuth();
-      onClose();
+      const users = JSON.parse(localStorage.getItem('users')) || [];
+      const user = users.find(u => u.email === values.email && u.password === values.password);
+
+      if (user) {
+        dispatch(signIn(user));
+        setLoginError(null);
+        onSuccessfulAuth();
+        onClose();
+        alert('Login successful!');
+      } else {
+        setLoginError('Invalid email or password');
+      }
     } catch (error) {
-      console.error("Sign in error:", error);
+      setLoginError('Login failed. Please try again.');
     } finally {
       setSubmitting(false);
     }
@@ -41,14 +44,8 @@ const SignIn = ({ onClose, onSuccessfulAuth }) => {
         backgroundColor: "white",
         padding: 3,
         borderRadius: 2,
-        boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
         width: '550px',
         border: 'none',
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
-        bgcolor: "#f8f9fa"
       }}
     >
       <Box>
@@ -62,8 +59,14 @@ const SignIn = ({ onClose, onSuccessfulAuth }) => {
           <Typography variant="body2">Login with your email & password</Typography>
         </Box>
 
+        {loginError && (
+          <Alert severity="error" sx={{ mb: 2 }}>
+            {loginError}
+          </Alert>
+        )}
+
         <Formik
-          initialValues={initialValues}
+          initialValues={{ email: "", password: "" }}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
@@ -74,7 +77,6 @@ const SignIn = ({ onClose, onSuccessfulAuth }) => {
                 id="email"
                 name="email"
                 label="Email"
-                variant="outlined"
                 value={values.email}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -89,7 +91,6 @@ const SignIn = ({ onClose, onSuccessfulAuth }) => {
                 name="password"
                 label="Password"
                 type={showPassword ? "text" : "password"}
-                variant="outlined"
                 value={values.password}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -99,7 +100,7 @@ const SignIn = ({ onClose, onSuccessfulAuth }) => {
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
-                      <IconButton onClick={togglePasswordVisibility}>
+                      <IconButton onClick={() => setShowPassword(!showPassword)}>
                         {showPassword ? <VisibilityOff /> : <Visibility />}
                       </IconButton>
                     </InputAdornment>
@@ -108,9 +109,9 @@ const SignIn = ({ onClose, onSuccessfulAuth }) => {
               />
 
               <Box display="flex" justifyContent="space-between" alignItems="center" mt={1}>
-                <a href="#" style={{ textDecoration: "none", fontSize: "0.875rem" }}>
+                <Typography variant="body2" color="primary" sx={{ cursor: 'pointer' }}>
                   Forgot password?
-                </a>
+                </Typography>
               </Box>
 
               <Button
@@ -123,36 +124,41 @@ const SignIn = ({ onClose, onSuccessfulAuth }) => {
               >
                 {isSubmitting ? "Logging in..." : "Login"}
               </Button>
+
+              <Divider sx={{ my: 2 }}>Or</Divider>
+
+              <Button
+                fullWidth
+                variant="contained"
+                startIcon={<Google />}
+                sx={{ mb: 1, bgcolor: "#4285F4", "&:hover": { bgcolor: "#357ae8" } }}
+              >
+                Login with Google
+              </Button>
+
+              <Button
+                fullWidth
+                variant="contained"
+                startIcon={<MobileFriendly />}
+                sx={{ mb: 2, bgcolor: "#6c757d", "&:hover": { bgcolor: "#5a6268" } }}
+              >
+                Login with Mobile number
+              </Button>
+
+              <Typography variant="body2" align="center">
+                Don't have an account?{" "}
+                <Typography
+                  component="span"
+                  color="primary"
+                  sx={{ cursor: 'pointer', color: 'green' }}
+                  onClick={onSwitchToSignUp}
+                >
+                  Register
+                </Typography>
+              </Typography>
             </Form>
           )}
         </Formik>
-
-        <Divider sx={{ my: 2 }}>Or</Divider>
-
-        <Button
-          fullWidth
-          variant="contained"
-          startIcon={<Google />}
-          sx={{ mb: 1, bgcolor: "#4285F4", "&:hover": { bgcolor: "#357ae8" } }}
-        >
-          Login with Google
-        </Button>
-
-        <Button
-          fullWidth
-          variant="contained"
-          startIcon={<MobileFriendly />}
-          sx={{ mb: 2, bgcolor: "#6c757d", "&:hover": { bgcolor: "#5a6268" } }}
-        >
-          Login with Mobile number
-        </Button>
-
-        <Typography variant="body2" align="center">
-          Don't have any account?{" "}
-          <a href="#" style={{ textDecoration: "none", color: "#28a745" }}>
-            Register
-          </a>
-        </Typography>
       </Box>
     </Box>
   );

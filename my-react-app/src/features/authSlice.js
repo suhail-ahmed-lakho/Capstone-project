@@ -1,35 +1,63 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
-// Define the async thunk for signIn
-export const signIn = createAsyncThunk('auth/signIn', async (credentials) => {
-  // Your sign-in logic here, e.g., API call
-  // return response.data; // Example return statement
-});
+const initialState = {
+  user: JSON.parse(localStorage.getItem('currentUser')) || null,
+  isAuthenticated: !!localStorage.getItem('currentUser'),
+  error: null,
+  loading: false
+};
 
-// Define the async thunk for signUp
-export const signUp = createAsyncThunk('auth/signUp', async (userData) => {
-  // Your sign-up logic here, e.g., API call
-  // return response.data; // Example return statement
-});
-
-const userSlice = createSlice({
-  name: 'user',
-  initialState: {
-    currentUser: null,
-  },
+const authSlice = createSlice({
+  name: 'auth',
+  initialState,
   reducers: {
-    setUser: (state, action) => {
-      state.currentUser = action.payload;
+    signIn: (state, action) => {
+      state.user = action.payload;
+      state.isAuthenticated = true;
+      state.error = null;
+      localStorage.setItem('currentUser', JSON.stringify(action.payload));
     },
-    updateUser: (state, action) => {
-      state.currentUser = { ...state.currentUser, ...action.payload };
+    signUp: (state, action) => {
+      state.user = action.payload;
+      state.isAuthenticated = true;
+      state.error = null;
+      localStorage.setItem('currentUser', JSON.stringify(action.payload));
     },
-    clearUser: (state) => {
-      state.currentUser = null;
+    logout: (state) => {
+      state.user = null;
+      state.isAuthenticated = false;
+      state.error = null;
+      localStorage.removeItem('currentUser');
     },
+    updateProfile: (state, action) => {
+      const updatedUser = { ...state.user, ...action.payload };
+      state.user = updatedUser;
+      
+      // Update both in localStorage
+      const users = JSON.parse(localStorage.getItem('users')) || [];
+      const updatedUsers = users.map(user => 
+        user.id === updatedUser.id ? updatedUser : user
+      );
+      
+      localStorage.setItem('users', JSON.stringify(updatedUsers));
+      localStorage.setItem('currentUser', JSON.stringify(updatedUser));
+    },
+    setError: (state, action) => {
+      state.error = action.payload;
+    },
+    clearError: (state) => {
+      state.error = null;
+    }
   },
 });
 
-export const { setUser, updateUser, clearUser } = userSlice.actions;
-export default userSlice.reducer;
+export const { 
+  signIn, 
+  signUp, 
+  logout, 
+  updateProfile, 
+  setError, 
+  clearError 
+} = authSlice.actions;
 
+export default authSlice.reducer;

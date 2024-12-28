@@ -3,12 +3,11 @@ import './index.css';
 import App from './App.jsx';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import { Provider } from 'react-redux'; // Import Provider from react-redux
-import store from './store/slices/store.js'; // Import your Redux store
+import { Provider } from 'react-redux';
+import store from './store'; // Updated import path to match your store location
 
-// Create a root for rendering the application
 createRoot(document.getElementById('root')).render(
-  <Provider store={store}> {/* Wrap App with Provider to pass the store */}
-    <App /> {/* Main application component */}
+  <Provider store={store}>
+    <App />
   </Provider>
 );

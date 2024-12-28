@@ -1,80 +1,121 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { updateProfile } from '../features/authSlice';
-import { Box, TextField, Button, Typography, Avatar } from '@mui/material';
-import { styled } from '@mui/system';
-
-const StyledForm = styled('form')(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'column',
-  gap: theme.spacing(2),
-  maxWidth: 400,
-  margin: '0 auto',
-}));
+import { 
+  Box, 
+  Typography, 
+  Paper, 
+  Avatar, 
+  Container, 
+  Grid, 
+  Button,
+  Divider 
+} from '@mui/material';
+import { Link } from 'react-router-dom';
+import { logout } from '../features/authSlice';
 
 const UserProfile = () => {
-  const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
-  const [name, setName] = useState(user?.name || '');
-  const [email, setEmail] = useState(user?.email || '');
-  const [image, setImage] = useState(user?.image || '');
+  const dispatch = useDispatch();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    dispatch(updateProfile({ name, email, image }));
+  const handleLogout = () => {
+    dispatch(logout());
+    window.location.href = '/';
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImage(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+  if (!user) {
+    return (
+      <Container maxWidth="md" sx={{ mt: 12 }}>
+        <Typography variant="h5" align="center">
+          Please login to view your profile
+        </Typography>
+      </Container>
+    );
+  }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        Edit Profile
-      </Typography>
-      <StyledForm onSubmit={handleSubmit}>
-        <Avatar
-          src={image}
-          alt={name}
-          sx={{ width: 100, height: 100, margin: '0 auto' }}
-        />
-        <input
-          accept="image/*"
-          style={{ display: 'none' }}
-          id="raised-button-file"
-          type="file"
-          onChange={handleImageChange}
-        />
-        <label htmlFor="raised-button-file">
-          <Button variant="contained" component="span">
-            Upload Image
-          </Button>
-        </label>
-        <TextField
-          label="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          fullWidth
-        />
-        <TextField
-          label="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          fullWidth
-        />
-        <Button type="submit" variant="contained" color="primary">
-          Save Changes
-        </Button>
-      </StyledForm>
-    </Box>
+    <Container maxWidth="md" sx={{ mt: 12 }}>
+      <Paper elevation={3} sx={{ p: 4 }}>
+        <Grid container spacing={3}>
+          <Grid item xs={12} display="flex" justifyContent="center">
+            <Avatar
+              sx={{ 
+                width: 120, 
+                height: 120,
+                bgcolor: 'green',
+                fontSize: '3rem'
+              }}
+            >
+              {user.username?.charAt(0).toUpperCase()}
+            </Avatar>
+          </Grid>
+          
+          <Grid item xs={12}>
+            <Typography variant="h4" align="center" gutterBottom>
+              {user.username}
+            </Typography>
+            <Typography variant="body1" align="center" color="textSecondary">
+              Member since {new Date(user.createdAt).toLocaleDateString()}
+            </Typography>
+          </Grid>
+
+          <Grid item xs={12}>
+            <Divider sx={{ my: 2 }} />
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <Typography variant="subtitle1" color="textSecondary">
+              Email
+            </Typography>
+            <Typography variant="body1" gutterBottom>
+              {user.email}
+            </Typography>
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <Typography variant="subtitle1" color="textSecondary">
+              Phone
+            </Typography>
+            <Typography variant="body1" gutterBottom>
+              {user.phone || 'Not provided'}
+            </Typography>
+          </Grid>
+
+          <Grid item xs={12}>
+            <Typography variant="subtitle1" color="textSecondary">
+              Address
+            </Typography>
+            <Typography variant="body1" gutterBottom>
+              {user.address || 'Not provided'}
+            </Typography>
+          </Grid>
+
+          <Grid item xs={12} sx={{ mt: 3 }}>
+            <Box display="flex" justifyContent="space-between">
+              <Button
+                component={Link}
+                to="/edit-profile"
+                variant="contained"
+                sx={{ 
+                  bgcolor: 'green',
+                  '&:hover': {
+                    bgcolor: 'darkgreen',
+                  }
+                }}
+              >
+                Edit Profile
+              </Button>
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={handleLogout}
+              >
+                Logout
+              </Button>
+            </Box>
+          </Grid>
+        </Grid>
+      </Paper>
+    </Container>
   );
 };
 

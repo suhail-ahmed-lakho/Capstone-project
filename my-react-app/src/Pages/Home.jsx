@@ -21,14 +21,22 @@ import {
   ExpandLess,
   AddShoppingCart,
 } from "@mui/icons-material";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShoppingCart, faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faShoppingCart,
+  faPlus,
+  faMinus,
+} from "@fortawesome/free-solid-svg-icons";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper-bundle.css";
 import Footer from "../components/Footer";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart, decreaseQuantity, increaseQuantity } from "../store/slices/cartSlice";
-import { selectItems } from '../features/itemsSlice';
+import {
+  addToCart,
+  decreaseQuantity,
+  increaseQuantity,
+} from "../store/slices/cartSlice";
+import { selectItems } from "../features/itemsSlice";
 
 // Import all images
 import BgImage from "../images/bg-image.png";
@@ -59,10 +67,13 @@ const Home = () => {
   const handleSearchChange = (event) => {
     const value = event.target.value;
     setSearchTerm(value);
-    
+
     if (value) {
-      const suggestions = Object.values(items).flat()
-        .filter(item => item.label.toLowerCase().includes(value.toLowerCase()))
+      const suggestions = Object.values(items)
+        .flat()
+        .filter((item) =>
+          item.label.toLowerCase().includes(value.toLowerCase())
+        )
         .slice(0, 5);
       setSearchSuggestions(suggestions);
     } else {
@@ -70,13 +81,16 @@ const Home = () => {
     }
   };
 
-  const filteredItems = selectedCategory === "All"
-    ? Object.values(items).flat().filter((item) =>
-        item.label.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-    : items[selectedCategory].filter((item) =>
-        item.label.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+  const filteredItems =
+    selectedCategory === "All"
+      ? Object.values(items)
+          .flat()
+          .filter((item) =>
+            item.label.toLowerCase().includes(searchTerm.toLowerCase())
+          )
+      : items[selectedCategory].filter((item) =>
+          item.label.toLowerCase().includes(searchTerm.toLowerCase())
+        );
 
   const loadMoreItems = () => {
     setVisibleItemsCount((prevCount) => prevCount + 8);
@@ -107,9 +121,7 @@ const Home = () => {
       {/* Hero Section */}
 
       <Box
-
         sx={{
-
           bgcolor: "background.paper",
 
           py: { xs: 4, sm: 6, md: 8 },
@@ -123,17 +135,11 @@ const Home = () => {
           backgroundPosition: "center",
 
           pb: 10,
-
         }}
-
       >
-
         <Container
-
           maxWidth="md"
-
           sx={{
-
             display: "flex",
 
             flexDirection: "column",
@@ -145,25 +151,15 @@ const Home = () => {
             height: "100%",
 
             textAlign: { xs: "center", sm: "center", md: "left" },
-
           }}
-
         >
-
           <Typography
-
             component="h1"
-
             variant={{ xs: "h4", sm: "h3", md: "h2" }}
-
             align="center"
-
             color="text.primary"
-
             gutterBottom
-
             sx={{
-
               fontWeight: 700,
 
               letterSpacing: "0.05em",
@@ -171,75 +167,44 @@ const Home = () => {
               textShadow: "1px 1px 2px rgba(0, 0, 0, 0.3)",
 
               whiteSpace: "nowrap",
-
             }}
-
           >
-
             Groceries Delivered in 90 Minutes
-
           </Typography>
 
           <Typography
-
             variant={{ xs: "h6", sm: "h5" }}
-
             align="center"
-
             color="text.secondary"
-
             paragraph
-
           >
-
             Get your healthy foods & snacks delivered at your doorsteps all day
-
             everyday
-
           </Typography>
 
           <Box sx={{ mt: 4, display: "flex", justifyContent: "center" }}>
-
             <TextField
-
               variant="outlined"
-
               placeholder="Search your products"
-
               value={searchTerm}
-
               onChange={handleSearchChange}
-
               sx={{
-
                 width: "500px",
 
                 mb: 2,
 
                 "& .MuiOutlinedInput-root": {
-
                   "&:hover fieldset": {
-
                     borderColor: "green",
-
                   },
-
                 },
-
               }}
-
               InputProps={{
-
                 endAdornment: (
-
                   <Button
-
                     variant="contained"
-
                     color="success"
-
                     sx={{
-
                       padding: "0 16px",
 
                       height: "100%",
@@ -253,59 +218,63 @@ const Home = () => {
                       right: 0,
 
                       "&:hover": {
-
                         backgroundColor: "#388e3c",
 
                         transform: "scale(1.05)",
-
                       },
-
                     }}
-
                   >
-
                     <SearchIcon sx={{ fontSize: 20 }} />
-
                   </Button>
-
                 ),
-
               }}
-
             />
 
             {searchSuggestions.length > 0 && (
-
-              <Box sx={{ position: "absolute", zIndex: 1, bgcolor: "white", border: "1px solid #ddd", borderRadius: "4px", mt: 1 }}>
-
+              <Box
+                sx={{
+                  position: "absolute",
+                  zIndex: 1,
+                  bgcolor: "white",
+                  border: "1px solid #ddd",
+                  borderRadius: "4px",
+                  mt: 1,
+                }}
+              >
                 {searchSuggestions.map((item) => (
-
                   <Button
-
                     key={item.id}
-
                     onClick={() => handleAddToCart(item)}
-
-                    sx={{ justifyContent: "flex-start", width: "100%", textAlign: "left", "&:hover": { bgcolor: "#f0f0f0" } }}
-
+                    sx={{
+                      justifyContent: "flex-start",
+                      width: "100%",
+                      textAlign: "left",
+                      color: "green",
+                      gap: 2,
+                      "&:hover": {
+                        bgcolor: "#f0f0f0",
+                        "& .suggestion-cart": {
+                          transform: "rotate(10deg)",
+                        },
+                      },
+                    }}
                   >
-
                     {item.label}
-
+                    <FontAwesomeIcon
+                      icon={faShoppingCart}
+                      size="sm"
+                      className="suggestion-cart"
+                      style={{
+                        transition: "transform 0.3s ease",
+                      }}
+                    />
                   </Button>
-
                 ))}
-
               </Box>
-
             )}
-
           </Box>
-
         </Container>
-
       </Box>
-
 
       {/* Swiper Section */}
       <Box sx={{ mt: 4, mb: 4 }}>
@@ -420,7 +389,7 @@ const Home = () => {
                           width: "100%",
                           height: "auto",
                           borderRadius: "8px",
-                          cursor: "pointer"
+                          cursor: "pointer",
                         }}
                         onClick={() => handleOpenModal(item)}
                       />
@@ -481,17 +450,19 @@ const Home = () => {
         aria-labelledby="product-modal-title"
         aria-describedby="product-modal-description"
       >
-        <Card sx={{ 
-          position: 'absolute', 
-          top: '50%', 
-          left: '50%', 
-          transform: 'translate(-50%, -50%)',
-          width: 500,
-          maxWidth: '90%',
-          bgcolor: 'background.paper',
-          boxShadow: 24,
-          p: 4,
-        }}>
+        <Card
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 500,
+            maxWidth: "90%",
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            p: 4,
+          }}
+        >
           {selectedItem && (
             <>
               <CardMedia
@@ -501,7 +472,11 @@ const Home = () => {
                 alt={selectedItem.label}
               />
               <CardContent>
-                <Typography id="product-modal-title" variant="h6" component="h2">
+                <Typography
+                  id="product-modal-title"
+                  variant="h6"
+                  component="h2"
+                >
                   {selectedItem.label}
                 </Typography>
                 <Typography id="product-modal-description" sx={{ mt: 2 }}>
@@ -510,24 +485,55 @@ const Home = () => {
                 <Typography variant="body2" color="text.secondary">
                   Weight: {selectedItem.weight}
                 </Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                  Product details: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ mt: 1 }}
+                >
+                  Product details: Lorem ipsum dolor sit amet, consectetur
+                  adipiscing elit. Sed do eiusmod tempor incididunt ut labore et
+                  dolore magna aliqua.
                 </Typography>
               </CardContent>
-              <CardActions>
-                <Button 
-                  variant="contained" 
-                  color="primary" 
+              <CardActions sx={{ justifyContent: "space-between", px: 2 }}>
+                <Button
+                  variant="contained"
                   onClick={() => handleBuyNow(selectedItem)}
+                  sx={{
+                    bgcolor: "green",
+                    "&:hover": {
+                      bgcolor: "darkgreen",
+                      transform: "translateY(-2px)",
+                    },
+                    transition: "all 0.3s ease",
+                  }}
                 >
                   Buy Now
                 </Button>
-                <Button 
-                  variant="contained" 
-                  color="secondary" 
+                <Button
+                  variant="outlined"
                   onClick={() => handleAddToCart(selectedItem)}
+                  sx={{
+                    color: "green",
+                    borderColor: "green",
+                    "&:hover": {
+                      bgcolor: "green",
+                      color: "white",
+                      transform: "translateY(-2px)",
+                    },
+                    transition: "all 0.3s ease",
+                  }}
                 >
-                  Add to Cart
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                    <FontAwesomeIcon
+                      icon={faShoppingCart}
+                      size="sm"
+                      style={{
+                        transition: "transform 0.3s ease",
+                      }}
+                    />
+                    Add to Cart
+                  </Box>
                 </Button>
               </CardActions>
             </>
@@ -539,18 +545,21 @@ const Home = () => {
       <Button
         variant="contained"
         color="primary"
-        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        sx={{ position: "fixed", bottom: 20, right: 20, borderRadius: "50%", padding: "20px" }}
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        sx={{
+          position: "fixed",
+          bottom: 20,
+          right: 20,
+          borderRadius: "50%",
+          padding: "20px",
+        }}
       >
         ↑
       </Button>
 
       <Footer />
-
-     
     </Box>
   );
 };
 
 export default Home;
-
