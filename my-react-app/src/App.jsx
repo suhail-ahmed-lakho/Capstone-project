@@ -10,6 +10,7 @@ import EditProfile from './components/EditProfile';
 import UserProfile from './components/UserProfile.jsx';
 import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
+import Checkout from './Pages/Checkout.jsx';
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -33,6 +34,7 @@ function App() {
         <Route path="/offers" element={<Offers />} />
         <Route path="/pages" element={<Pages />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/checkout" element={<Checkout />} />
         
         {/* Protected Routes */}
         <Route 

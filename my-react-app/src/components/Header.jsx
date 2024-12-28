@@ -11,6 +11,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import CloseIcon from '@mui/icons-material/Close'; // Add this line
 import {
   Button,
   Drawer,
@@ -28,12 +29,16 @@ import {
   faShoppingCart,
   faUserCircle,
   faBars,
+  faPlus,    
+  faMinus,   
+  faTrash
 } from "@fortawesome/free-solid-svg-icons";
 
 import {
   increaseQuantity,
   decreaseQuantity,
   removeFromCart,
+
 } from "../features/cartSlice";
 import { logout } from "../features/authSlice";
 import SignUpForm from "./SignUpForm";
@@ -212,8 +217,13 @@ export default function PrimarySearchAppBar() {
   const handleMobileMenuCloseCustom = () => {
     setMobileMenuOpen(false);
   };
-
+  const handleCheckout = () => {
+    handleDrawerClose(); // Close the cart drawer
+    navigate('/checkout'); // Navigate to checkout page
+  };
   const menuId = "primary-search-account-menu";
+  const pagesMenuId = "primary-pages-menu"; // Add this line
+  
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
@@ -268,32 +278,58 @@ export default function PrimarySearchAppBar() {
       }}
       open={isGroceryMenuOpen}
       onClose={handleGroceryMenuClose}
+      PaperProps={{
+        sx: {
+          mt: 1.5,
+          borderRadius: 2,
+          minWidth: 220,
+          boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+          '& .MuiMenuItem-root': {
+            px: 2,
+            py: 1.5,
+            borderRadius: 1,
+            margin: '4px 8px',
+            transition: 'all 0.2s ease',
+            '&:hover': {
+              bgcolor: 'rgba(0, 128, 0, 0.08)',
+              transform: 'translateX(8px)',
+              '& .MuiSvgIcon-root': {
+                color: 'green',
+                transform: 'scale(1.2)',
+              }
+            },
+          },
+          '& .MuiSvgIcon-root': {
+            transition: 'all 0.2s ease',
+            color: '#666',
+          }
+        }
+      }}
     >
       <MenuItem onClick={handleGroceryMenuClose}>
-        <LocalPizzaIcon sx={{ mr: 1 }} /> Fast Food
+        <LocalPizzaIcon sx={{ mr: 2 }} /> Fast Food
       </MenuItem>
       <MenuItem onClick={handleGroceryMenuClose}>
-        <KitchenIcon sx={{ mr: 1 }} /> Frozen
+        <KitchenIcon sx={{ mr: 2 }} /> Frozen
       </MenuItem>
       <MenuItem onClick={handleGroceryMenuClose}>
-        <CakeIcon sx={{ mr: 1 }} /> Bakery
+        <CakeIcon sx={{ mr: 2 }} /> Bakery
       </MenuItem>
       <MenuItem onClick={handleGroceryMenuClose}>
-        <EmojiFoodBeverageIcon sx={{ mr: 1 }} /> Dairy
+        <EmojiFoodBeverageIcon sx={{ mr: 2 }} /> Dairy
       </MenuItem>
       <MenuItem onClick={handleGroceryMenuClose}>
-        <LocalDrinkIcon sx={{ mr: 1 }} /> Drinks
+        <LocalDrinkIcon sx={{ mr: 2 }} /> Drinks
       </MenuItem>
       <MenuItem onClick={handleGroceryMenuClose}>
-        <EggIcon sx={{ mr: 1 }} /> Eggs
+        <EggIcon sx={{ mr: 2 }} /> Eggs
       </MenuItem>
       <MenuItem onClick={handleGroceryMenuClose}>
-        <RiceBowlIcon sx={{ mr: 1 }} /> Rice
+        <RiceBowlIcon sx={{ mr: 2 }} /> Rice
       </MenuItem>
     </Menu>
   );
-
-  const pagesMenuId = "primary-pages-menu";
+  
   const renderPagesMenu = (
     <Menu
       anchorEl={pagesAnchorEl}
@@ -309,21 +345,75 @@ export default function PrimarySearchAppBar() {
       }}
       open={isPagesMenuOpen}
       onClose={handlePagesMenuClose}
+      PaperProps={{
+        sx: {
+          mt: 1.5,
+          borderRadius: 2,
+          minWidth: 200,
+          boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+          '& .MuiMenuItem-root': {
+            px: 2,
+            py: 1.5,
+            borderRadius: 1,
+            margin: '4px 8px',
+            transition: 'all 0.2s ease',
+            '&:hover': {
+              bgcolor: 'rgba(0, 128, 0, 0.08)',
+              transform: 'translateX(8px)',
+              color: 'green'
+            },
+          }
+        }
+      }}
     >
-      <MenuItem onClick={handlePagesMenuClose} component={Link} to="/faq">
+      <MenuItem 
+        onClick={handlePagesMenuClose} 
+        component={Link} 
+        to="/faq"
+        sx={{
+          '&:hover': {
+            '&::before': {
+              content: '"→"',
+              position: 'absolute',
+              right: 16,
+              opacity: 0.5
+            }
+          }
+        }}
+      >
         FAQ
       </MenuItem>
-      <MenuItem
-        onClick={handlePagesMenuClose}
-        component={Link}
+      <MenuItem 
+        onClick={handlePagesMenuClose} 
+        component={Link} 
         to="/privacy-policy"
+        sx={{
+          '&:hover': {
+            '&::before': {
+              content: '"→"',
+              position: 'absolute',
+              right: 16,
+              opacity: 0.5
+            }
+          }
+        }}
       >
         Privacy Policy
       </MenuItem>
-      <MenuItem
-        onClick={handlePagesMenuClose}
-        component={Link}
+      <MenuItem 
+        onClick={handlePagesMenuClose} 
+        component={Link} 
         to="/terms-of-service"
+        sx={{
+          '&:hover': {
+            '&::before': {
+              content: '"→"',
+              position: 'absolute',
+              right: 16,
+              opacity: 0.5
+            }
+          }
+        }}
       >
         Terms of Service
       </MenuItem>
@@ -709,73 +799,193 @@ export default function PrimarySearchAppBar() {
         </Box>
       </Modal>
       <StyledDrawer
-        anchor="right"
-        open={drawerOpen}
-        onClose={handleDrawerClose}
-      >
-        <Box sx={{ width: "100%", padding: 2 }}>
-          <Typography
-            variant="h4"
-            sx={{ marginBottom: 5, textAlign: "center", fontWeight: "bold" }}
+  anchor="right"
+  open={drawerOpen}
+  onClose={handleDrawerClose}
+>
+  <Box sx={{ width: "100%", padding: 3, height: '100%', display: 'flex', flexDirection: 'column' }}>
+    {/* Cart Header */}
+    <Box sx={{ 
+      display: 'flex', 
+      justifyContent: 'space-between', 
+      alignItems: 'center',
+      pb: 2,
+      borderBottom: '1px solid #eee'
+    }}>
+      <Typography variant="h5" sx={{ fontWeight: 600 }}>
+        Shopping Cart ({cartItems.length})
+      </Typography>
+      <IconButton onClick={handleDrawerClose}>
+        <CloseIcon />
+      </IconButton>
+    </Box>
+
+    {/* Cart Items */}
+    <Box sx={{ 
+      flexGrow: 1, 
+      overflowY: 'auto',
+      my: 2,
+      pr: 1
+    }}>
+      {cartItems.length === 0 ? (
+        <Box sx={{ 
+          height: '100%', 
+          display: 'flex', 
+          flexDirection: 'column', 
+          alignItems: 'center', 
+          justifyContent: 'center',
+          gap: 2,
+          color: 'text.secondary'
+        }}>
+          <FontAwesomeIcon 
+            icon={faShoppingCart} 
+            style={{ fontSize: '3rem', opacity: 0.3 }}
+          />
+          <Typography variant="h6">Your cart is empty</Typography>
+          <Button 
+            variant="outlined" 
+            color="primary"
+            onClick={handleDrawerClose}
           >
-            Shopping Cart
-          </Typography>
-          {cartItems.map((item) => (
-            <Box
-              key={item.id}
-              sx={{ display: "flex", alignItems: "center", marginBottom: 2 }}
-            >
-              <img
-                src={item.img}
-                alt={item.label}
-                style={{ width: 50, height: 50, marginRight: 10 }}
-              />
-              <Box sx={{ flexGrow: 1 }}>
-                <Typography variant="body1">{item.label}</Typography>
-                <Typography variant="body2" color="text.secondary">
-                  ${item.price} x {item.quantity}
-                </Typography>
-              </Box>
-              <Box>
-                <IconButton onClick={() => dispatch(decreaseQuantity(item))}>
-                  -
+            Continue Shopping
+          </Button>
+        </Box>
+      ) : (
+        cartItems.map((item) => (
+          <Box
+            key={item.id}
+            sx={{
+              display: "flex",
+              gap: 2,
+              p: 2,
+              mb: 2,
+              bgcolor: '#f8f9fa',
+              borderRadius: 2,
+              transition: 'transform 0.2s ease',
+              '&:hover': {
+                transform: 'translateX(-5px)',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
+              }
+            }}
+          >
+            <img
+              src={item.img}
+              alt={item.label}
+              style={{
+                width: 80,
+                height: 80,
+                objectFit: "cover",
+                borderRadius: 8
+              }}
+            />
+            <Box sx={{ flex: 1 }}>
+              <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
+                {item.label}
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                ${parseFloat(item.price.replace('$', ''))} × {item.quantity}
+              </Typography>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <IconButton 
+                  size="small"
+                  onClick={() => dispatch(decreaseQuantity(item))}
+                  sx={{ 
+                    bgcolor: 'white',
+                    '&:hover': { bgcolor: '#e8e8e8' }
+                  }}
+                >
+                  <FontAwesomeIcon icon={faMinus} size="xs" />
                 </IconButton>
-                <Typography variant="body1" component="span">
+                <Typography 
+                  sx={{ 
+                    minWidth: '30px', 
+                    textAlign: 'center',
+                    fontWeight: 500 
+                  }}
+                >
                   {item.quantity}
                 </Typography>
-                <IconButton onClick={() => dispatch(increaseQuantity(item))}>
-                  +
-                </IconButton>
-                <IconButton onClick={() => dispatch(removeFromCart(item.id))}>
-                  <DeleteIcon />
+                <IconButton 
+                  size="small"
+                  onClick={() => dispatch(increaseQuantity(item))}
+                  sx={{ 
+                    bgcolor: 'white',
+                    '&:hover': { bgcolor: '#e8e8e8' }
+                  }}
+                >
+                  <FontAwesomeIcon icon={faPlus} size="xs" />
                 </IconButton>
               </Box>
             </Box>
-          ))}
-          {cartItems.length === 0 && (
-            <Typography variant="h5" sx={{ textAlign: "center" }}>
-              Your cart is empty
-            </Typography>
-          )}
-          {cartItems.length > 0 && (
-            <>
-              <hr />
-              <Typography variant="h6" sx={{ marginTop: 2 }}>
-                Total: ${totalPrice.toFixed(2)}
-              </Typography>
-              <hr />
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleBuyNow}
-                sx={{ marginTop: 2, width: "100%" }}
-              >
-                Buy Now
-              </Button>
-            </>
-          )}
+            <IconButton
+  onClick={() => dispatch(removeFromCart(item.id))}
+  sx={{
+    color: '#ff4d4d',
+    width: '32px',
+    height: '32px',
+    '&:hover': {
+      bgcolor: 'rgba(255, 77, 77, 0.1)',
+      transform: 'rotate(10deg) scale(1.1)',
+      '& .trash-icon': {
+        color: '#ff1a1a'
+      }
+    },
+    transition: 'all 0.3s ease'
+  }}
+>
+  <FontAwesomeIcon 
+    icon={faTrash} 
+    className="trash-icon"
+    style={{
+      fontSize: '1rem',
+      transition: 'all 0.3s ease'
+    }}
+  />
+</IconButton>
+          </Box>
+        ))
+      )}
+    </Box>
+
+    {/* Cart Footer */}
+    {cartItems.length > 0 && (
+      <Box sx={{ 
+        pt: 2, 
+        borderTop: '1px solid #eee',
+        mt: 'auto'
+      }}>
+        <Box sx={{ 
+          display: 'flex', 
+          justifyContent: 'space-between',
+          mb: 2,
+          px: 2
+        }}>
+          <Typography variant="h6">Total:</Typography>
+          <Typography variant="h6" color="primary" sx={{ fontWeight: 600 }}>
+            ${totalPrice.toFixed(2)}
+          </Typography>
         </Box>
-      </StyledDrawer>
+        <Button
+  variant="contained"
+  fullWidth
+  onClick={handleCheckout}
+  sx={{
+    bgcolor: 'green',
+    py: 1.5,
+    fontSize: '1.1rem',
+    '&:hover': {
+      bgcolor: 'darkgreen',
+      transform: 'translateY(-2px)',
+      boxShadow: '0 4px 8px rgba(0,0,0,0.2)'
+    },
+    transition: 'all 0.3s ease'
+  }}
+>
+  Checkout Now
+</Button>    </Box>
+    )}
+  </Box>
+</StyledDrawer>
     </Box>
   );
 }

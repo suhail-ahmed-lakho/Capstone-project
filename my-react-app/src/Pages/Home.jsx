@@ -28,6 +28,7 @@ import {
   faMinus,
 } from "@fortawesome/free-solid-svg-icons";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { faCartPlus } from "@fortawesome/free-solid-svg-icons";
 import "swiper/swiper-bundle.css";
 import Footer from "../components/Footer";
 import { useDispatch, useSelector } from "react-redux";
@@ -45,6 +46,67 @@ import Img2 from "../images/img-2.webp";
 import Img3 from "../images/img-3.webp";
 import Img4 from "../images/img-4.webp";
 import Img5 from "../images/img-5.webp";
+
+// Add these imports at the top with your other MUI imports
+
+// Update the imports - remove FastFood and use alternative icons
+import {
+  LocalFlorist,          // Fruits & Vegetables
+  Restaurant,            // Meat & Fish
+  LocalCafe,            // Snacks & Beverages
+  Pets,                 // Pet Care
+  CleaningServices,     // Home & Cleaning
+  LocalDrink,           // Dairy
+  Kitchen,              // Cooking
+  FreeBreakfast,        // Breakfast
+  LocalBar,             // Beverage
+  Cake,                 // Bakery & Cakes
+  LocalDining,          // Ready to Eat
+  EmojiFoodBeverage,    // Tea & Coffee
+  LocalPizza,           // Fast Food
+  RiceBowl,             // Rice & Grains
+  Egg,                  // Eggs
+  Grass,                // Organic Food
+  LunchDining,          // Instead of FastFood
+  Cookie,               // Biscuits & Cookies
+  Icecream,             // Ice Cream
+  Inventory,            // Dry Fruits & Nuts
+  LocalMall,            // Packaged Foods
+  WaterDrop,            // Oil & Ghee
+  Spa,                  // Spices & Masalas
+  ShoppingBasket,       // Groceries
+} from "@mui/icons-material";
+
+
+
+// Update the getCategoryIcon function - replace FastFood with LunchDining
+const getCategoryIcon = (category) => {
+  const icons = {
+    'Fruits & Vegetables': <LocalFlorist sx={{ color: '#2e7d32' }} />,
+    'Meat & Fish': <Restaurant sx={{ color: '#d32f2f' }} />,
+    'Snacks & Beverages': <LocalCafe sx={{ color: '#ed6c02' }} />,
+    'Pet Care': <Pets sx={{ color: '#9c27b0' }} />,
+    'Home & Cleaning': <CleaningServices sx={{ color: '#0288d1' }} />,
+    'Dairy & Eggs': <Egg sx={{ color: '#ffa726' }} />,
+    'Cooking Essentials': <Kitchen sx={{ color: '#d84315' }} />,
+    'Breakfast': <FreeBreakfast sx={{ color: '#6d4c41' }} />,
+    'Tea & Coffee': <EmojiFoodBeverage sx={{ color: '#5d4037' }} />,
+    'Bakery & Cakes': <Cake sx={{ color: '#c2185b' }} />,
+    'Ice Cream': <Icecream sx={{ color: '#00acc1' }} />,
+    'Fast Food': <LunchDining sx={{ color: '#f57c00' }} />, // Changed to LunchDining
+    'Rice & Grains': <RiceBowl sx={{ color: '#689f38' }} />,
+    'Organic Food': <Grass sx={{ color: '#558b2f' }} />,
+    'Ready to Eat': <LocalDining sx={{ color: '#e64a19' }} />,
+    'Instant Food': <LocalPizza sx={{ color: '#f4511e' }} />,
+    'Biscuits & Cookies': <Cookie sx={{ color: '#8d6e63' }} />,
+    'Dry Fruits & Nuts': <Inventory sx={{ color: '#795548' }} />,
+    'Spices & Masalas': <Spa sx={{ color: '#d84315' }} />,
+    'Packaged Foods': <LocalMall sx={{ color: '#00897b' }} />,
+    'Oil & Ghee': <WaterDrop sx={{ color: '#ffa000' }} />,
+    'All Categories': <ShoppingBasket sx={{ color: '#2e7d32' }} />,
+  };
+  return icons[category] || <ShoppingBasket sx={{ color: '#2e7d32' }} />;
+};
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -111,8 +173,9 @@ const Home = () => {
   };
 
   const handleBuyNow = (item) => {
-    console.log("Buy Now clicked:", item);
+    dispatch(addToCart(item));
     handleCloseModal();
+    navigate('/checkout');
   };
 
   return (
@@ -300,67 +363,55 @@ const Home = () => {
         <Grid container spacing={2}>
           {/* Category Sidebar */}
           <Grid item xs={12} md={3}>
-            <Box
-              sx={{
-                bgcolor: "#f9f9f9",
-                borderRadius: "8px",
-                boxShadow: 2,
-                p: 2,
-                maxHeight: "600px",
-                overflowY: "auto",
-              }}
-            >
-              <Typography variant="h6" gutterBottom>
-                Categories
-                <Button
-                  onClick={() => setShowCategories(!showCategories)}
-                  sx={{ ml: 1 }}
-                >
-                  {showCategories ? <ExpandLess /> : <ExpandMore />}
-                </Button>
-              </Typography>
-              {showCategories && (
-                <Box>
-                  <Button
-                    variant="outlined"
-                    fullWidth
-                    sx={{
-                      mb: 1,
-                      backgroundColor:
-                        selectedCategory === "All" ? "#e0f7fa" : "transparent",
-                      "&:hover": { backgroundColor: "#f0f0f0" },
-                      borderRadius: "20px",
-                      padding: "10px",
-                    }}
-                    onClick={() => handleCategoryChange("All")}
-                  >
-                    All
-                  </Button>
-                  {Object.keys(items).map((category) => (
-                    <Tooltip title={`View ${category}`} arrow key={category}>
-                      <Button
-                        variant="outlined"
-                        fullWidth
-                        sx={{
-                          mb: 1,
-                          backgroundColor:
-                            selectedCategory === category
-                              ? "#e0f7fa"
-                              : "transparent",
-                          "&:hover": { backgroundColor: "#f0f0f0" },
-                          borderRadius: "20px",
-                          padding: "10px",
-                        }}
-                        onClick={() => handleCategoryChange(category)}
-                      >
-                        {category}
-                      </Button>
-                    </Tooltip>
-                  ))}
-                </Box>
-              )}
-            </Box>
-          </Grid>
+  <Box
+    sx={{
+      bgcolor: "#fff",
+      borderRadius: "8px",
+      boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+      p: 2,
+      maxHeight: "600px",
+      overflowY: "auto",
+    }}
+  >
+    {showCategories && (
+      <Box>
+        {Object.keys(items).map((category) => (
+          <Button
+          key={category}
+          fullWidth
+          startIcon={getCategoryIcon(category)}
+          sx={{
+            mb: 1,
+            py: 1.5,
+            justifyContent: "flex-start",
+            color: selectedCategory === category ? 'green' : 'inherit',
+            bgcolor: selectedCategory === category ? 'rgba(0, 128, 0, 0.08)' : 'transparent',
+            borderLeft: selectedCategory === category ? '4px solid green' : '4px solid transparent',
+            '&:hover': { 
+              bgcolor: 'rgba(0, 128, 0, 0.08)',
+              borderLeft: '4px solid green',
+              '& .MuiButton-startIcon': {
+                transform: 'scale(1.1)'
+              }
+            },
+            '& .MuiButton-startIcon': {
+              transition: 'transform 0.2s'
+            },
+            borderRadius: '0 8px 8px 0',
+            textTransform: 'none',
+            fontSize: '0.95rem',
+            fontWeight: selectedCategory === category ? 600 : 400,
+            pl: 2,
+          }}
+          onClick={() => handleCategoryChange(category)}
+        >
+          {category}
+        </Button>
+        ))}
+      </Box>
+    )}
+  </Box>
+</Grid>
 
           {/* Product Grid */}
           <Grid item xs={12} md={9}>
@@ -370,61 +421,135 @@ const Home = () => {
               ) : (
                 filteredItems.slice(0, visibleItemsCount).map((item) => (
                   <Grid item xs={12} sm={6} md={4} lg={3} key={item.id}>
+                  <Box
+                    sx={{
+                      bgcolor: 'white',
+                      borderRadius: '8px',
+                      p: 2,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      transition: 'all 0.3s ease',
+                      position: 'relative',
+                      boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+                      '&:hover': { 
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                        transform: 'translateY(-5px)'
+                      },
+                    }}
+                  >
+                    {/* Discount Badge */}
+                    {item.discount && (
+                      <Box
+                        sx={{
+                          position: 'absolute',
+                          top: 10,
+                          right: 10,
+                          bgcolor: '#ffc107',
+                          color: 'white',
+                          px: 1,
+                          py: 0.5,
+                          borderRadius: '4px',
+                          fontSize: '0.875rem',
+                          fontWeight: 'bold',
+                        }}
+                      >
+                        25% OFF
+                      </Box>
+                    )}
+              
+                    {/* Product Image */}
                     <Box
                       sx={{
-                        border: "1px solid #ddd",
-                        borderRadius: "8px",
-                        p: 2,
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        transition: "transform 0.2s",
-                        "&:hover": { transform: "scale(1.05)" },
+                        position: 'relative',
+                        width: '100%',
+                        pt: '100%',
+                        mb: 2,
                       }}
                     >
                       <img
                         src={item.img}
                         alt={item.label}
                         style={{
-                          width: "100%",
-                          height: "auto",
-                          borderRadius: "8px",
-                          cursor: "pointer",
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'contain',
+                          cursor: 'pointer',
                         }}
                         onClick={() => handleOpenModal(item)}
                       />
-                      <Typography variant="h6" align="center" sx={{ mt: 1 }}>
+                    </Box>
+              
+                    {/* Product Info */}
+                    <Box sx={{ flexGrow: 1 }}>
+                      <Typography 
+                        variant="h6" 
+                        sx={{ 
+                          fontSize: '1rem',
+                          fontWeight: 500,
+                          mb: 0.5,
+                          color: '#2d3436'
+                        }}
+                      >
                         {item.label}
                       </Typography>
-                      <Typography
-                        variant="body2"
-                        align="center"
-                        sx={{ color: "text.secondary" }}
+                      <Typography 
+                        variant="body2" 
+                        sx={{ 
+                          color: '#636e72',
+                          mb: 1,
+                          fontSize: '0.875rem'
+                        }}
                       >
                         {item.weight}
                       </Typography>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          width: "100%",
-                          mt: 1,
+                    </Box>
+              
+                    {/* Price and Cart */}
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        mt: 1,
+                      }}
+                    >
+                      <Typography 
+                        variant="h6" 
+                        sx={{ 
+                          color: '#00b894',
+                          fontWeight: 600,
+                          fontSize: '1.1rem'
                         }}
                       >
-                        <Typography variant="h6" sx={{ color: "primary.main" }}>
-                          {item.price}
-                        </Typography>
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          startIcon={<FontAwesomeIcon icon={faPlus} />}
-                          onClick={() => handleAddToCart(item)}
-                        >
-                          Add
-                        </Button>
-                      </Box>
+                        ${parseFloat(item.price.replace('$', '')).toFixed(2)}
+                      </Typography>
+              
+                      <IconButton
+                        onClick={() => handleAddToCart(item)}
+                        sx={{
+                          bgcolor: '#00b894',
+                          color: 'white',
+                          width: '36px',
+                          height: '36px',
+                          '&:hover': {
+                            bgcolor: '#00a884',
+                            transform: 'scale(1.1)',
+                          },
+                          transition: 'all 0.2s ease',
+                          boxShadow: '0 2px 4px rgba(0,184,148,0.2)',
+                        }}
+                      >
+                        <FontAwesomeIcon 
+                          icon={faCartPlus} 
+                          style={{ fontSize: '1rem' }}
+                        />
+                      </IconButton>
                     </Box>
-                  </Grid>
+                  </Box>
+                </Grid>
                 ))
               )}
             </Grid>
