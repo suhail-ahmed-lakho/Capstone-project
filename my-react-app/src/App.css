@@ -3,3 +3,22 @@ body {
 }
 
 /* ... existing styles ... */
+.mySwiper {
+    padding: 20px 10px 40px !important;
+  }
+  
+  .swiper-pagination-bullet-active {
+    background-color: #00b894 !important;
+  }
+  
+  .swiper-button-next,
+  .swiper-button-prev {
+    color: #00b894 !important;
+  }
+  
+  @media (max-width: 480px) {
+    .swiper-button-next,
+    .swiper-button-prev {
+      display: none !important;
+    }
+  }

@@ -11,6 +11,7 @@ import UserProfile from './components/UserProfile.jsx';
 import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 import Checkout from './Pages/Checkout.jsx';
+import ErrorPage from './Pages/ErrorPage.jsx';
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -35,6 +36,7 @@ function App() {
         <Route path="/pages" element={<Pages />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/checkout" element={<Checkout />} />
+        <Route path="*" element={<ErrorPage />} />
         
         {/* Protected Routes */}
         <Route 

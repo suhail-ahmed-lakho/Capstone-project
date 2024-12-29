@@ -47,66 +47,29 @@ import Img3 from "../images/img-3.webp";
 import Img4 from "../images/img-4.webp";
 import Img5 from "../images/img-5.webp";
 
-// Add these imports at the top with your other MUI imports
+import { Pagination, Navigation, Autoplay } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import 'swiper/css/navigation';
 
-// Update the imports - remove FastFood and use alternative icons
+//  MUI icons 
 import {
-  LocalFlorist,          // Fruits & Vegetables
-  Restaurant,            // Meat & Fish
-  LocalCafe,            // Snacks & Beverages
-  Pets,                 // Pet Care
-  CleaningServices,     // Home & Cleaning
-  LocalDrink,           // Dairy
-  Kitchen,              // Cooking
-  FreeBreakfast,        // Breakfast
-  LocalBar,             // Beverage
-  Cake,                 // Bakery & Cakes
-  LocalDining,          // Ready to Eat
-  EmojiFoodBeverage,    // Tea & Coffee
-  LocalPizza,           // Fast Food
-  RiceBowl,             // Rice & Grains
-  Egg,                  // Eggs
-  Grass,                // Organic Food
-  LunchDining,          // Instead of FastFood
-  Cookie,               // Biscuits & Cookies
-  Icecream,             // Ice Cream
-  Inventory,            // Dry Fruits & Nuts
-  LocalMall,            // Packaged Foods
-  WaterDrop,            // Oil & Ghee
-  Spa,                  // Spices & Masalas
-  ShoppingBasket,       // Groceries
+  FreeBreakfast as BreakfastIcon,
+  Restaurant as RestaurantIcon,
+  LocalDining as LocalDiningIcon,
+  Kitchen as KitchenIcon,
+  Fastfood as FastfoodIcon,
+  LocalPizza as LocalPizzaIcon,
+  EmojiFoodBeverage as BeverageIcon,
+  LocalCafe as CafeIcon,
+  Icecream as IcecreamIcon,
+  Cookie as CookieIcon,
+  RamenDining as NoodlesIcon,
+  SoupKitchen as SoupIcon,
+  SetMeal as SauceIcon
 } from "@mui/icons-material";
-
-
-
 // Update the getCategoryIcon function - replace FastFood with LunchDining
-const getCategoryIcon = (category) => {
-  const icons = {
-    'Fruits & Vegetables': <LocalFlorist sx={{ color: '#2e7d32' }} />,
-    'Meat & Fish': <Restaurant sx={{ color: '#d32f2f' }} />,
-    'Snacks & Beverages': <LocalCafe sx={{ color: '#ed6c02' }} />,
-    'Pet Care': <Pets sx={{ color: '#9c27b0' }} />,
-    'Home & Cleaning': <CleaningServices sx={{ color: '#0288d1' }} />,
-    'Dairy & Eggs': <Egg sx={{ color: '#ffa726' }} />,
-    'Cooking Essentials': <Kitchen sx={{ color: '#d84315' }} />,
-    'Breakfast': <FreeBreakfast sx={{ color: '#6d4c41' }} />,
-    'Tea & Coffee': <EmojiFoodBeverage sx={{ color: '#5d4037' }} />,
-    'Bakery & Cakes': <Cake sx={{ color: '#c2185b' }} />,
-    'Ice Cream': <Icecream sx={{ color: '#00acc1' }} />,
-    'Fast Food': <LunchDining sx={{ color: '#f57c00' }} />, // Changed to LunchDining
-    'Rice & Grains': <RiceBowl sx={{ color: '#689f38' }} />,
-    'Organic Food': <Grass sx={{ color: '#558b2f' }} />,
-    'Ready to Eat': <LocalDining sx={{ color: '#e64a19' }} />,
-    'Instant Food': <LocalPizza sx={{ color: '#f4511e' }} />,
-    'Biscuits & Cookies': <Cookie sx={{ color: '#8d6e63' }} />,
-    'Dry Fruits & Nuts': <Inventory sx={{ color: '#795548' }} />,
-    'Spices & Masalas': <Spa sx={{ color: '#d84315' }} />,
-    'Packaged Foods': <LocalMall sx={{ color: '#00897b' }} />,
-    'Oil & Ghee': <WaterDrop sx={{ color: '#ffa000' }} />,
-    'All Categories': <ShoppingBasket sx={{ color: '#2e7d32' }} />,
-  };
-  return icons[category] || <ShoppingBasket sx={{ color: '#2e7d32' }} />;
-};
+
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -180,183 +143,261 @@ const Home = () => {
 
   return (
     <Box>
+    
       {/* Hero Section */}
-      {/* Hero Section */}
 
-      <Box
-        sx={{
-          bgcolor: "background.paper",
+    {/* Hero Section */}
+<Box
+  sx={{
+    position: 'relative',
+    width: '100%',
+    overflow: 'hidden', // Prevent horizontal scroll
+    bgcolor: "background.paper",
+    backgroundImage: `url(${BgImage})`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    minHeight: { xs: "100vh", sm: "80vh", md: "90vh" }, // Use minHeight instead of height
+    display: 'flex',
+    alignItems: 'center',
+    pt: { xs: '64px', sm: '72px' }, // Account for header height
+    pb: { xs: 4, sm: 6, md: 8 },
+  }}
+>
+  <Container 
+    maxWidth="lg"
+    sx={{
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+      py: { xs: 4, sm: 6, md: 8 },
+    }}
+  >
+    <Typography
+      component="h1"
+      variant="h2"
+      align="center"
+      color="text.primary"
+      gutterBottom
+      sx={{
+        fontWeight: 700,
+        letterSpacing: "0.05em",
+        textShadow: "1px 1px 2px rgba(0, 0, 0, 0.3)",
+        fontSize: { xs: '2rem', sm: '2.75rem', md: '3.5rem' },
+        maxWidth: '90%',
+        wordWrap: 'break-word', // Handle long words
+        mb: { xs: 2, sm: 3 }
+      }}
+    >
+      Groceries Delivered in 90 Minutes
+    </Typography>
 
-          py: { xs: 4, sm: 6, md: 8 },
-
-          backgroundImage: `url(${BgImage})`,
-
-          backgroundSize: "cover",
-
-          height: { xs: "60vh", sm: "70vh", md: "90vh" },
-
-          backgroundPosition: "center",
-
-          pb: 10,
-        }}
-      >
-        <Container
-          maxWidth="md"
+    <Typography
+      variant="h5"
+      align="center"
+      color="text.secondary"
+      sx={{
+        mb: { xs: 3, sm: 4 },
+        maxWidth: '800px',
+        px: 2,
+        fontSize: { xs: '1rem', sm: '1.25rem', md: '1.5rem' }
+      }}
+    >
+      Get your healthy foods & snacks delivered at your doorsteps all day everyday
+    </Typography>
+          
+<Box sx={{ mt: 4, display: "flex", justifyContent: "center", position: 'relative' }}>
+  <TextField
+    variant="outlined"
+    placeholder="Search your products from here"
+    value={searchTerm}
+    onChange={handleSearchChange}
+    sx={{
+      width: { xs: '90%', sm: '600px' },
+      '& .MuiOutlinedInput-root': {
+        bgcolor: 'white',
+        borderRadius: '50px',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+        transition: 'all 0.3s ease',
+        '&:hover': {
+          boxShadow: '0 4px 12px rgba(0,0,0,0.12)',
+          '& .search-button': {
+            bgcolor: 'darkgreen',
+            transform: 'translateX(5px)',
+          }
+        },
+        '&.Mui-focused': {
+          '& fieldset': { borderColor: 'green' },
+        }
+      },
+      '& .MuiOutlinedInput-input': {
+        padding: '16px 24px',
+      }
+    }}
+    InputProps={{
+      endAdornment: (
+        <Button
+          variant="contained"
+          className="search-button"
           sx={{
-            display: "flex",
-
-            flexDirection: "column",
-
-            alignItems: "center",
-
-            justifyContent: "center",
-
-            height: "100%",
-
-            textAlign: { xs: "center", sm: "center", md: "left" },
+            bgcolor: 'green',
+            borderRadius: '50px',
+            px: 3,
+            py: 1,
+            minWidth: 'auto',
+            position: 'absolute',
+            right: 5,
+            transition: 'all 0.3s ease',
+            '&:hover': {
+              bgcolor: 'darkgreen',
+            }
           }}
         >
-          <Typography
-            component="h1"
-            variant={{ xs: "h4", sm: "h3", md: "h2" }}
-            align="center"
-            color="text.primary"
-            gutterBottom
-            sx={{
-              fontWeight: 700,
+          <SearchIcon />
+        </Button>
+      ),
+    }}
+  />
 
-              letterSpacing: "0.05em",
-
-              textShadow: "1px 1px 2px rgba(0, 0, 0, 0.3)",
-
-              whiteSpace: "nowrap",
+  {/* Search Suggestions Dropdown */}
+  {searchSuggestions.length > 0 && (
+    <Box
+      sx={{
+        position: 'absolute',
+        top: '100%',
+        width: { xs: '90%', sm: '600px' },
+        mt: 1,
+        bgcolor: 'white',
+        borderRadius: 2,
+        boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+        zIndex: 1000,
+        overflow: 'hidden',
+        animation: 'fadeIn 0.3s ease',
+        '@keyframes fadeIn': {
+          from: { opacity: 0, transform: 'translateY(-10px)' },
+          to: { opacity: 1, transform: 'translateY(0)' }
+        }
+      }}
+    >
+      {searchSuggestions.map((item, index) => (
+        <Box
+          key={item.id}
+          onClick={() => {
+            handleOpenModal(item);
+            setSearchSuggestions([]);
+            setSearchTerm('');
+          }}
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 2,
+            p: 2,
+            cursor: 'pointer',
+            transition: 'all 0.2s ease',
+            borderBottom: index < searchSuggestions.length - 1 ? '1px solid #eee' : 'none',
+            '&:hover': {
+              bgcolor: 'rgba(0, 128, 0, 0.05)',
+              transform: 'translateX(10px)'
+            }
+          }}
+        >
+          <img
+            src={item.img}
+            alt={item.label}
+            style={{
+              width: 40,
+              height: 40,
+              objectFit: 'cover',
+              borderRadius: 8
             }}
-          >
-            Groceries Delivered in 90 Minutes
-          </Typography>
-
-          <Typography
-            variant={{ xs: "h6", sm: "h5" }}
-            align="center"
-            color="text.secondary"
-            paragraph
-          >
-            Get your healthy foods & snacks delivered at your doorsteps all day
-            everyday
-          </Typography>
-
-          <Box sx={{ mt: 4, display: "flex", justifyContent: "center" }}>
-            <TextField
-              variant="outlined"
-              placeholder="Search your products"
-              value={searchTerm}
-              onChange={handleSearchChange}
-              sx={{
-                width: "500px",
-
-                mb: 2,
-
-                "& .MuiOutlinedInput-root": {
-                  "&:hover fieldset": {
-                    borderColor: "green",
-                  },
-                },
-              }}
-              InputProps={{
-                endAdornment: (
-                  <Button
-                    variant="contained"
-                    color="success"
-                    sx={{
-                      padding: "0 16px",
-
-                      height: "100%",
-
-                      minWidth: "auto",
-
-                      transition: "background-color 0.3s, transform 0.3s",
-
-                      position: "absolute",
-
-                      right: 0,
-
-                      "&:hover": {
-                        backgroundColor: "#388e3c",
-
-                        transform: "scale(1.05)",
-                      },
-                    }}
-                  >
-                    <SearchIcon sx={{ fontSize: 20 }} />
-                  </Button>
-                ),
-              }}
-            />
-
-            {searchSuggestions.length > 0 && (
-              <Box
-                sx={{
-                  position: "absolute",
-                  zIndex: 1,
-                  bgcolor: "white",
-                  border: "1px solid #ddd",
-                  borderRadius: "4px",
-                  mt: 1,
-                }}
-              >
-                {searchSuggestions.map((item) => (
-                  <Button
-                    key={item.id}
-                    onClick={() => handleAddToCart(item)}
-                    sx={{
-                      justifyContent: "flex-start",
-                      width: "100%",
-                      textAlign: "left",
-                      color: "green",
-                      gap: 2,
-                      "&:hover": {
-                        bgcolor: "#f0f0f0",
-                        "& .suggestion-cart": {
-                          transform: "rotate(10deg)",
-                        },
-                      },
-                    }}
-                  >
-                    {item.label}
-                    <FontAwesomeIcon
-                      icon={faShoppingCart}
-                      size="sm"
-                      className="suggestion-cart"
-                      style={{
-                        transition: "transform 0.3s ease",
-                      }}
-                    />
-                  </Button>
-                ))}
-              </Box>
-            )}
+          />
+          <Box>
+            <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
+              {item.label}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {item.weight} • ${parseFloat(item.price.replace('$', '')).toFixed(2)}
+            </Typography>
           </Box>
+        </Box>
+      ))}
+    </Box>
+  )}
+</Box>
         </Container>
       </Box>
 
+    
       {/* Swiper Section */}
-      <Box sx={{ mt: 4, mb: 4 }}>
-        <Swiper
-          spaceBetween={10}
-          slidesPerView={3}
-          breakpoints={{
-            640: { slidesPerView: 1 },
-            768: { slidesPerView: 2 },
-            1024: { slidesPerView: 3 },
-          }}
-        >
-          {[Img1, Img2, Img3, Img4, Img5].map((img, index) => (
-            <SwiperSlide key={index}>
-              <img src={img} alt="" style={{ width: "100%", height: "auto" }} />
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </Box>
+<Box sx={{ mt: 4, mb: 4 }}>
+  <Container maxWidth="lg">
+    <Swiper
+      spaceBetween={20}
+      slidesPerView={1}
+      breakpoints={{
+        // when window width is >= 480px
+        480: {
+          slidesPerView: 1,
+          spaceBetween: 10
+        },
+        // when window width is >= 640px
+        640: {
+          slidesPerView: 2,
+          spaceBetween: 15
+        },
+        // when window width is >= 768px
+        768: {
+          slidesPerView: 2,
+          spaceBetween: 20
+        },
+        // when window width is >= 1024px
+        1024: {
+          slidesPerView: 3,
+          spaceBetween: 20
+        }
+      }}
+      pagination={{
+        clickable: false,
+        dynamicBullets: true,
+      }}
+      navigation={false}
+      autoplay={{
+        delay: 3000,
+        disableOnInteraction: false,
+      }}
+      loop={true}
+      modules={[Pagination, Navigation, Autoplay]}
+      className="mySwiper"
+    >
+      {[Img1, Img2, Img3, Img4, Img5].map((img, index) => (
+        <SwiperSlide key={index}>
+          <Box
+            sx={{
+              position: 'relative',
+              paddingTop: '56.25%', // 16:9 aspect ratio
+              borderRadius: '12px',
+              overflow: 'hidden',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+            }}
+          >
+            <img
+              src={img}
+              alt={`Slide ${index + 1}`}
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+              }}
+            />
+          </Box>
+        </SwiperSlide>
+      ))}
+    </Swiper>
+  </Container>
+</Box>
 
       {/* Category and Items Section */}
       <Container maxWidth="lg">
@@ -365,49 +406,91 @@ const Home = () => {
           <Grid item xs={12} md={3}>
   <Box
     sx={{
+      position: 'sticky',
+      top: '80px', // Adjust based on your header height
+      maxHeight: 'calc(100vh - 100px)',
+      overflowY: 'auto',
       bgcolor: "#fff",
       borderRadius: "8px",
       boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
       p: 2,
-      maxHeight: "600px",
-      overflowY: "auto",
+      '&::-webkit-scrollbar': {
+        width: '6px',
+      },
+      '&::-webkit-scrollbar-thumb': {
+        backgroundColor: 'rgba(0,0,0,0.2)',
+        borderRadius: '3px',
+      }
     }}
   >
+    <Typography variant="h6" sx={{ mb: 2, fontWeight: 600, px: 2 }}>
+      Categories
+    </Typography>
     {showCategories && (
       <Box>
-        {Object.keys(items).map((category) => (
-          <Button
-          key={category}
-          fullWidth
-          startIcon={getCategoryIcon(category)}
-          sx={{
-            mb: 1,
-            py: 1.5,
-            justifyContent: "flex-start",
-            color: selectedCategory === category ? 'green' : 'inherit',
-            bgcolor: selectedCategory === category ? 'rgba(0, 128, 0, 0.08)' : 'transparent',
-            borderLeft: selectedCategory === category ? '4px solid green' : '4px solid transparent',
-            '&:hover': { 
-              bgcolor: 'rgba(0, 128, 0, 0.08)',
-              borderLeft: '4px solid green',
-              '& .MuiButton-startIcon': {
-                transform: 'scale(1.1)'
-              }
-            },
-            '& .MuiButton-startIcon': {
-              transition: 'transform 0.2s'
-            },
-            borderRadius: '0 8px 8px 0',
-            textTransform: 'none',
-            fontSize: '0.95rem',
-            fontWeight: selectedCategory === category ? 600 : 400,
-            pl: 2,
-          }}
-          onClick={() => handleCategoryChange(category)}
-        >
-          {category}
-        </Button>
-        ))}
+        {Object.keys(items).map((category) => {
+          // Get the appropriate icon for each category
+          const getIcon = (cat) => {
+            switch(cat) {
+              case 'Breakfast':
+                return <BreakfastIcon />;
+              case 'Meat & Fish':
+                return <RestaurantIcon />;
+              case 'Snacks':
+                return <FastfoodIcon />;
+              case 'Nuts & Biscuits':
+                return <CookieIcon />;
+              case 'Chocolates':
+                return <IcecreamIcon />;
+              case 'Crisps':
+                return <LocalPizzaIcon />;
+              case 'Noodles & Pasta':
+                return <NoodlesIcon />;
+              case 'Sauce':
+                return <SauceIcon />;
+              case 'Soup':
+                return <SoupIcon />;
+              default:
+                return <LocalDiningIcon />;
+            }
+          };
+
+          return (
+            <Button
+              key={category}
+              fullWidth
+              startIcon={getIcon(category)}
+              sx={{
+                mb: 0.5,
+                py: 1.5,
+                justifyContent: "flex-start",
+                color: selectedCategory === category ? 'green' : 'inherit',
+                bgcolor: selectedCategory === category ? 'rgba(0, 128, 0, 0.08)' : 'transparent',
+                borderLeft: selectedCategory === category ? '4px solid green' : '4px solid transparent',
+                '&:hover': { 
+                  bgcolor: 'rgba(0, 128, 0, 0.08)',
+                  borderLeft: '4px solid green',
+                  '& .MuiSvgIcon-root': {
+                    transform: 'scale(1.2)',
+                    color: 'green'
+                  }
+                },
+                '& .MuiSvgIcon-root': {
+                  transition: 'all 0.2s ease',
+                  fontSize: '1.3rem'
+                },
+                borderRadius: '0 8px 8px 0',
+                textTransform: 'none',
+                fontSize: '0.95rem',
+                fontWeight: selectedCategory === category ? 600 : 400,
+                pl: 2,
+              }}
+              onClick={() => handleCategoryChange(category)}
+            >
+              {category}
+            </Button>
+          );
+        })}
       </Box>
     )}
   </Box>
